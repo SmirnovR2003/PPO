@@ -1,0 +1,187 @@
+{
+  "main": {
+    "id": "13662dc6fc3504f7",
+    "type": "split",
+    "children": [
+      {
+        "id": "b26e95ad16636d4a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bff79f98bcd1750b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "1. Исходные сведения/Архитектурные факторы.md.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Архитектурные факторы.md"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "81f8663d5fec33a6",
+    "type": "split",
+    "children": [
+      {
+        "id": "6ce11acb07b37674",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d70815251384e4d1",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "bead7331ebfecd25",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
+            }
+          },
+          {
+            "id": "0eef6636606b1390",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 374.5
+  },
+  "right": {
+    "id": "df14ab42f36ca197",
+    "type": "split",
+    "children": [
+      {
+        "id": "e997c29f8e299a53",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ebd1b485b9253a01",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "1. Исходные сведения/Архитектурные факторы.md.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки для Архитектурные факторы.md"
+            }
+          },
+          {
+            "id": "310a84780d124bd7",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "1. Исходные сведения/Архитектурные факторы.md.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки из Архитектурные факторы.md"
+            }
+          },
+          {
+            "id": "972fa75502599e61",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
+            }
+          },
+          {
+            "id": "a3c2b6b61ba8ed38",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "1. Исходные сведения/Архитектурные факторы.md.md"
+              },
+              "icon": "lucide-list",
+              "title": "Структура Архитектурные факторы.md"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false
+    }
+  },
+  "active": "bff79f98bcd1750b",
+  "lastOpenFiles": [
+    "README.md",
+    "ADR/2024-10.1 - Выбор архитектурной формы системы.md.md",
+    "ADR/2024-10.3 - Выбор технологии программирования клиентского приложения.md.md",
+    "ADR/2024-10.2 - Выбор технологии программирования серверной части.md.md",
+    "1. Исходные сведения/Архитектурные факторы.md.md",
+    "ADR/2024-10.8 - Выбор инструментов для мониторинга системы.md.md",
+    "ADR/2024-10.7 - Выбор технологического процесса разработки.md.md",
+    "ADR/2024-10.6 - Выбор инструментов автоматического тестирования.md.md",
+    "ADR/2024-10.4 - Выбор системы хранения данных.md.md",
+    "ADR/2024-10.9 - Паттерны проектирования для системы обмена валют.md",
+    "1. Исходные сведения/Словарь.md.md",
+    "1. Исходные сведения/Введение.md.md",
+    "ADR",
+    "Без названия.md",
+    "3. Технические процессы",
+    "2. Технический проект",
+    "1. Исходные сведения",
+    "Добро пожаловать.md"
+  ]
+}
