@@ -1,0 +1,23 @@
+@startuml Диаграмма контекста
+title "Контекстная диаграмма системы обмена валют"
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
+
+Person(user, "Пользователь", "Запрос на обмен валюты и проверка курсов")
+Person(admin, "Администратор", "Управление учетными записями пользователей и настройка системы")
+
+Container(currencyExchangeService, "Сервис обмена валют", "Java", "Обработка запросов на обмен валюты")
+
+System_Ext(financialAPI, "API финансовых рынков", "Получение актуальных курсов валют")
+System_Ext(notificationService, "Сервис уведомлений", "Отправка уведомлений пользователям")
+System_Ext(paymentAPI, "API интеграция", "Интеграция с платежными системами")
+
+Rel(user, currencyExchangeService, "Запросы на обмен валюты", "HTTPS/REST")
+Rel(admin, currencyExchangeService, "Управление учетными записями", "HTTPS/REST")
+Rel(currencyExchangeService, notificationService, "Отправка уведомлений", "HTTPS/REST")
+Rel(currencyExchangeService, paymentAPI, "Обработка платежей", "HTTPS/REST")
+Rel(currencyExchangeService, financialAPI, "Запрос актуальных курсов", "HTTPS/REST")
+
+@enduml

@@ -1,0 +1,43 @@
+@startuml Диаграмма контейнеров
+title "C4. Контейнеры системы обмена валют"
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
+!include $ICONURL/devicons/react.puml
+!include $ICONURL/devicons2/postgresql.puml
+
+' Персоны
+Person(user, "Пользователь", "Запрос на обмен валюты и проверка курсов")
+Person(admin, "Администратор", "Управление учетными записями пользователей и настройка системы")
+
+' Система
+System_Boundary(appBoundary, "Система обмена валют") {
+    Container(currencyExchangeService, "Сервис обмена валют", "Java", "Обработка запросов на обмен валюты с использованием микросервисной архитектуры")
+    Container(webApp, "Веб-приложение", "React", "Интерфейс для пользователей для обмена валют и проверки курсов")
+    Container(db, "База данных", "PostgreSQL", "Хранение данных о пользователях, курсах валют и транзакциях")
+    Container(apiIntegration, "Сервис API интеграции", "REST API", "Интеграция с платежными системами для многоканальной обработки платежей")
+    Container(exchangeRateService, "Сервис курсов валют", "Java", "Интеграция с API Центробанка для получения актуальных курсов валют")
+    Container(monitoringService, "Сервис мониторинга", "Prometheus", "Мониторинг состояния системы")
+    Container(testingService, "Сервис тестирования", "Selenium", "Автоматическое тестирование пользовательского интерфейса")
+}
+
+' Внешние системы
+System_Ext(financialAPI, "API финансовых рынков", "Получение актуальных курсов валют")
+System_Ext(paymentAPI, "API интеграция", "Интеграция с платежными системами")
+System_Ext(notificationServiceExt, "Сервис уведомлений", "Отправка уведомлений пользователям")
+
+' Расположение элементов
+user ----> webApp : "Использует\n[HTTP/TCP]"
+admin ----> webApp : "Использует\n[HTTP/TCP]"
+webApp --> currencyExchangeService : "API вызовы\n[HTTPS/REST]"
+currencyExchangeService --> db : "Чтение/запись\n[SQL]"
+currencyExchangeService --> apiIntegration : "Запросы на обработку платежей\n[HTTPS/REST]"
+apiIntegration --> paymentAPI : "Интеграция с платежными системами\n[HTTPS/REST]"
+currencyExchangeService ---> notificationServiceExt : "Отправка уведомлений\n[HTTPS/REST]"
+exchangeRateService ----> financialAPI : "Запрос актуальных курсов\n[HTTPS/REST]"
+exchangeRateService --> currencyExchangeService : "Обновление курсов\n[HTTPS/REST]"
+monitoringService --> currencyExchangeService : "Мониторинг состояния\n[TCP]"
+testingService ---> webApp : "Тестирование интерфейса\n[HTTP/TCP]"
+
+@enduml
