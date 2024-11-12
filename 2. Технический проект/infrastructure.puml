@@ -1,0 +1,69 @@
+@startuml Система обмена валют. Диаграмма инфраструктуры
+' C4
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+title "Система обмена валют. Диаграмма инфраструктуры"
+
+Person(trader, "Трейдер", "Запрос на обмен валюты и проверка курсов")
+Person(admin, "Администратор", "Управление учетными записями пользователей и настройка системы")
+
+package "Основной сервер" { 
+    Container(monitoringAgent, "Мониторинг", "Zabbix-агент", "")  
+
+    package "Docker-compose" { 
+        package "Docker-контейнер front" {  
+            Container(webApp, "Веб-приложение", "React", "Интерфейс для пользователей")  
+        }
+
+        package "Docker-контейнер back" { 
+            Container(currencyExchangeService, "Сервис обмена валют", "Java", "Обработка запросов на обмен валюты")
+            Container(exchangeRateService, "Сервис курсов валют", "Java", "Получение актуальных курсов валют")
+            Container(userAccountService, "Сервис пользователей и аккаунтов", "Java", "Управление учетными записями пользователей")
+            Container(accountService, "Сервис работы со счетами", "Java", "Управление счетами пользователей")
+            Container(transactionService, "Сервис транзакций", "Java", "Обработка финансовых транзакций")
+            Container(apiIntegration, "API интеграции с платежными системами", "REST API", "Интеграция с платежными системами")
+            Container(db, "База данных", "PostgreSQL", "Хранение данных о пользователях, курсах валют и транзакциях")
+            Container(eventBus, "Событийная шина", "Event Bus", "Обработка и маршрутизация событий между компонентами системы")
+        }
+    }
+}
+
+package "Вспомогательный сервер" { 
+    Container(monitoringServer, "Мониторинг", "Zabbix-сервер", "")  
+    Container(backupService, "Сервис резервного копирования", "Backup service", "")  
+}
+
+'ref
+trader --> webApp : "HTTPS"
+admin --> webApp : "HTTPS"
+webApp --> userAccountService : "HTTPS/REST"
+webApp --> currencyExchangeService : "HTTPS/REST"
+webApp --> transactionService : "HTTPS/REST"
+webApp --> exchangeRateService : "HTTPS/REST"
+webApp --> accountService : "HTTPS/REST"
+
+currencyExchangeService --> db : "SQL"
+transactionService --> db : "SQL"
+exchangeRateService --> db : "SQL"
+userAccountService --> db : "SQL"
+accountService --> db : "SQL"
+
+transactionService --> apiIntegration : "HTTPS/REST"
+
+userAccountService --> eventBus : "Публикация событий"
+accountService --> eventBus : "Публикация событий"
+transactionService --> eventBus : "Публикация событий"
+currencyExchangeService --> eventBus : "Публикация событий"
+exchangeRateService --> eventBus : "Публикация событий"
+
+monitoringAgent -> webApp : "TCP/IP"
+monitoringAgent -> currencyExchangeService : "TCP/IP"
+monitoringAgent -> exchangeRateService : "TCP/IP"
+monitoringAgent -> userAccountService : "TCP/IP"
+monitoringAgent -> accountService : "TCP/IP"
+monitoringAgent -> transactionService : "TCP/IP"
+
+backupService -up-> db : "TCP/IP"
+monitoringServer -up-> monitoringAgent : "TCP/IP"
+
+@enduml
