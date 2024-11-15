@@ -11,13 +11,13 @@ Component(currencyExchangeService, "Сервис обмена валют", "Java
 
 System_Boundary(currencyExchangeBoundary, "Currency Exchange Service") {
 
-    Component(CurrencyExchangeAPI, "CurrencyExchangeAPI", "Java", "API для обработки запросов на обмен валюты")
-    Component(CurrencyExchangeProcessor, "CurrencyExchangeProcessor", "Java", "Основная логика обработки обмена валюты")
+    Component(CurrencyExchangeAPI, "CurrencyExchangeControler", "Java", "API для обработки запросов на обмен валюты")
+    Component(CurrencyExchangeProcessor, "CurrencyExchangeService", "Java", "Основная логика обработки обмена валюты")
     Component(RateRepository, "RateRepository", "Java", "Получение актуальных курсов валют из БД")
-    Component(UserAccountsRepository, "UserAccountsRepository", "Java", "Хранение информации о пользователях")
+    Component(UserAccountsRepository, "UserAccountsRepository", "Java", "Получение информации о пользователях")
 }
 
-Component(ExchangeRatesDB, "ExchangeRatesDB", "База данных", "Хранение актуальных курсов валют")
+Component(ExchangeRatesDB, "DB", "PostgreSQL", "Хранение актуальных данных")
 
 Component(webApp, "Веб-приложение", "React", "Интерфейс для пользователей для обмена валют и проверки курсов")
 
