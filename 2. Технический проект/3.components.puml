@@ -28,7 +28,7 @@ CurrencyExchangeProcessor --> UserAccountsRepository : "Проверка бал�
 RateRepository --> ExchangeRatesDB : "Запрос курсов валют"
 UserAccountsRepository --> ExchangeRatesDB : "Запрос информации о пользователях"
 
-Component(EventBus, "EventBus", "Событийная шина", "Обработка и маршрутизация событий")
+Component(EventBus, "EventBus", "RabbitMQ", "Обработка и маршрутизация событий")
 
 CurrencyExchangeProcessor ---> EventBus : "Публикация события обмена валюты"
 

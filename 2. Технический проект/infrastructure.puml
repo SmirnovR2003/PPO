@@ -1,69 +1,63 @@
-@startuml Система обмена валют. Диаграмма инфраструктуры
-' C4
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+@startuml
+!define C4P https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master
+!includeurl C4P/C4_Container.puml
 
-title "Система обмена валют. Диаграмма инфраструктуры"
+title C4 Infrastructure Diagram - Система обмена валют
 
-Person(trader, "Трейдер", "Запрос на обмен валюты и проверка курсов")
-Person(admin, "Администратор", "Управление учетными записями пользователей и настройка системы")
+package "Облачная платформа" as cloud {
+    Container(nginx, "Nginx", "Nginx", "Обратный прокси и балансировщик нагрузки")
 
-package "Основной сервер" { 
-    Container(monitoringAgent, "Мониторинг", "Zabbix-агент", "")  
-
-    package "Docker-compose" { 
-        package "Docker-контейнер front" {  
-            Container(webApp, "Веб-приложение", "React", "Интерфейс для пользователей")  
+    package "Kubernetes Cluster" as k8s_cluster {
+        package "Currency Exchange Pod" as currency_pod {
+            Container(currency_service, "Currency Exchange Service", "Java, Spring Boot", "Сервис обработки обмена валют")
         }
 
-        package "Docker-контейнер back" { 
-            Container(currencyExchangeService, "Сервис обмена валют", "Java", "Обработка запросов на обмен валюты")
-            Container(exchangeRateService, "Сервис курсов валют", "Java", "Получение актуальных курсов валют")
-            Container(userAccountService, "Сервис пользователей и аккаунтов", "Java", "Управление учетными записями пользователей")
-            Container(accountService, "Сервис работы со счетами", "Java", "Управление счетами пользователей")
-            Container(transactionService, "Сервис транзакций", "Java", "Обработка финансовых транзакций")
-            Container(apiIntegration, "API интеграции с платежными системами", "REST API", "Интеграция с платежными системами")
-            Container(db, "База данных", "PostgreSQL", "Хранение данных о пользователях, курсах валют и транзакциях")
-            Container(eventBus, "Событийная шина", "Event Bus", "Обработка и маршрутизация событий между компонентами системы")
+        package "User Account Pod" as user_account_pod {
+            Container(user_service, "User Account Service", "Java, Spring Boot", "Сервис управления пользователями и их учетными записями")
         }
+
+        package "Transaction Pod" as transaction_pod {
+            Container(transaction_service, "Transaction Service", "Java, Spring Boot", "Сервис обработки транзакций")
+        }
+
+        package "Rate Pod" as rate_pod {
+            Container(rate_service, "Exchange Rate Service", "Java, Spring Boot", "Сервис получения и обновления курсов валют")
+        }
+
+        package "API Integration Pod" as api_integration_pod {
+            Container(api_service, "API Integration Service", "Java, Spring Boot", "Сервис интеграции с внешними платежными системами")
+        }
+    }
+
+    Container(RabbitMQ, "Message Broker", "RabbitMQ", "Асинхронная обработка событий")
+}
+
+package "Database Cluster" as db_cluster {
+    package "Region 1" as region1 {
+        Container(db_r1_master, "PostgreSQL Master", "PostgreSQL", "Основная база данных для региона 1")
+        Container(db_r1_replica, "PostgreSQL Replica", "PostgreSQL", "Реплика базы данных для региона 1")
+    }
+
+    package "Region n" as regionn {
+        Container(db_rn_master, "PostgreSQL Master", "PostgreSQL", "Основная база данных для региона n")
+        Container(db_rn_replica, "PostgreSQL Replica", "PostgreSQL", "Реплика базы данных для региона n")
     }
 }
 
-package "Вспомогательный сервер" { 
-    Container(monitoringServer, "Мониторинг", "Zabbix-сервер", "")  
-    Container(backupService, "Сервис резервного копирования", "Backup service", "")  
-}
+System_Ext(payment_system, "Платежная система", "Payment API")
+System_Ext(financial_api, "Финансовый API", "ЦБ API")
+System_Ext(notification_service, "Сервис уведомлений", "Email API")
 
-'ref
-trader --> webApp : "HTTPS"
-admin --> webApp : "HTTPS"
-webApp --> userAccountService : "HTTPS/REST"
-webApp --> currencyExchangeService : "HTTPS/REST"
-webApp --> transactionService : "HTTPS/REST"
-webApp --> exchangeRateService : "HTTPS/REST"
-webApp --> accountService : "HTTPS/REST"
+' Соединения между компонентами
+Rel(nginx, k8s_cluster, "Проксирование запросов", "HTTP")
+Rel(k8s_cluster, db_cluster, "Чтение/Запись данных", "JDBC")
+Rel(k8s_cluster, RabbitMQ, "Публикация событий", "KaRabbitMQfka Producer API")
 
-currencyExchangeService --> db : "SQL"
-transactionService --> db : "SQL"
-exchangeRateService --> db : "SQL"
-userAccountService --> db : "SQL"
-accountService --> db : "SQL"
+Rel_D(db_r1_master, db_r1_replica, "Репликация", "Streaming")
+Rel_D(db_rn_master, db_rn_replica, "Репликация", "Streaming")
 
-transactionService --> apiIntegration : "HTTPS/REST"
-
-userAccountService --> eventBus : "Публикация событий"
-accountService --> eventBus : "Публикация событий"
-transactionService --> eventBus : "Публикация событий"
-currencyExchangeService --> eventBus : "Публикация событий"
-exchangeRateService --> eventBus : "Публикация событий"
-
-monitoringAgent -> webApp : "TCP/IP"
-monitoringAgent -> currencyExchangeService : "TCP/IP"
-monitoringAgent -> exchangeRateService : "TCP/IP"
-monitoringAgent -> userAccountService : "TCP/IP"
-monitoringAgent -> accountService : "TCP/IP"
-monitoringAgent -> transactionService : "TCP/IP"
-
-backupService -up-> db : "TCP/IP"
-monitoringServer -up-> monitoringAgent : "TCP/IP"
+Rel(currency_service, financial_api, "Получение курсов валют", "REST API")
+Rel(api_service, payment_system, "Обработка платежей", "REST API")
+Rel(RabbitMQ, notification_service, "Отправка уведомлений", "REST API")
 
 @enduml
