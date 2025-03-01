@@ -42,4 +42,6 @@ class Constants
     const METHOD_READ = 'read';
     const METHOD_UPDATE = 'update';
     const METHOD_DELETE = 'delete';
+    const METHOD_GET_VIEW = 'addView';
+    const METHOD_ADD_VIEW = 'getViews';
 }

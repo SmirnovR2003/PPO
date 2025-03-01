@@ -56,9 +56,12 @@ switch ($controllerName) {
         exit;
 }
 
+
+
+
 if (method_exists($controller, $method)) {
     switch ($method) {
-        case 'create':
+        case Constants::METHOD_CREATE:
             if ($data) {
                 $controller->$method($data);
             } else {
@@ -66,14 +69,14 @@ if (method_exists($controller, $method)) {
                 echo json_encode(['error' => Constants::ERROR_DATA_REQUIRED]);
             }
             break;
-        case 'read':
+        case Constants::METHOD_READ:
             if ($id) {
                 $controller->$method($id);
             } else {
                 $controller->$method();
             }
             break;
-        case 'update':
+        case Constants::METHOD_UPDATE:
             if ($id && $data) {
                 $controller->$method($id, $data);
             } else {
@@ -81,7 +84,7 @@ if (method_exists($controller, $method)) {
                 echo json_encode(['error' => Constants::ERROR_ID_AND_DATA_REQUIRED]);
             }
             break;
-        case 'delete':
+        case Constants::METHOD_DELETE:
             if ($id) {
                 $controller->$method($id);
             } else {
@@ -89,7 +92,7 @@ if (method_exists($controller, $method)) {
                 echo json_encode(['error' => Constants::ERROR_ID_REQUIRED]);
             }
             break;
-        case 'addView':
+        case Constants::METHOD_GET_VIEW:
             if ($userId && $cardId) {
                 $controller->$method($userId, $cardId);
             } else {
@@ -97,7 +100,7 @@ if (method_exists($controller, $method)) {
                 echo json_encode(['error' => 'user_id and card_id are required']);
             }
             break;
-        case 'getViews':
+        case Constants::METHOD_ADD_VIEW:
             if ($userId) {
                 $controller->$method($userId);
             } else {
